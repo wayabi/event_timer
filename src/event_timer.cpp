@@ -5,8 +5,6 @@
 
 #include <boost/bind.hpp>
 
-#include "Util.h"
-
 using namespace std;
 using namespace boost;
 using namespace boost::asio;
@@ -18,10 +16,7 @@ event_timer::event_timer(boost::asio::io_service& ios) :
 
 void event_timer::add_timer_event(long long t, std::function<void()> f)
 {
-	long long tt = t - Util::get_millisec();
-	if(tt < 0) tt = 0;
-
-	auto timer = make_shared<deadline_timer>(ios_, posix_time::milliseconds(tt));
+	auto timer = make_shared<deadline_timer>(ios_, posix_time::milliseconds(t));
 	{
 		std::lock_guard<std::mutex> lock(mtx_);
 		timer_.push_back(timer);

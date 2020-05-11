@@ -5,8 +5,6 @@
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
 
-#include "Util.h"
-
 using namespace std;
 using namespace boost;
 using namespace boost::asio;
@@ -25,7 +23,7 @@ int main(int argc, char** argv){
 	event_timer et_(ios_);
 	while(true){
 		usleep(200*1000);
-		et_.add_timer_event(Util::get_millisec()+1000, print);
+		et_.add_timer_event(1000, print);
 	}
 
 	return 0;
