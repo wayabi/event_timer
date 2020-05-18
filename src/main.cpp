@@ -9,8 +9,13 @@ using namespace std;
 using namespace boost;
 using namespace boost::asio;
 
-void print(){
+void print1(){
 	cout << "1" << endl;
+}
+
+int count2 = 0;
+void print2(){
+	cout << count2++ << endl;
 }
 
 int main(int argc, char** argv){
@@ -21,10 +26,23 @@ int main(int argc, char** argv){
 	tg_.create_thread(boost::bind(&io_service::run, &ios_));
 
 	event_timer et_(ios_);
-	while(true){
-		usleep(200*1000);
-		et_.add_timer_event(1000, print);
+	et_.start();
+	et_.add_timer_event(1000, print1, true);
+	for(int i=0;i<1000;++i){
+		et_.add_timer_event(500, print2, false);
+		usleep(1*1000);
 	}
+
+	cout << "stop" << endl;
+	et_.stop();
+
+	usleep(2*1000*1000);
+
+	cout << "restart" << endl;
+	et_.start();
+	usleep(2*1000*1000);
+	et_.add_timer_event(1000, print1, true);
+	usleep(5*1000*1000);
 
 	return 0;
 }
